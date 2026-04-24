@@ -1,0 +1,29 @@
+# Local secrets and machine-specific config
+travel_automation.env
+travel_automation.local.env
+auto_reply_accounts.local.json
+competitor-analysis/config.json
+competitor-analysis/scrape_ctrip.py
+competitor-analysis/test_cookie.py
+colleague_corpus.jsonl
+.feishu_config.json
+
+# Runtime state
+.health_data.json
+.reply_state.json
+data_*/
+logs/
+
+# Generated scrape / pricing artifacts
+competitor-analysis/results/
+pricing/artifacts/
+pricing/captured_requests.json
+pricing/recommendation_*.md
+
+# Python / OS caches
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Browser and screenshot artifacts
+ui/*_preview.png

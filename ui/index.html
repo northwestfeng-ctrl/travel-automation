@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>因为旅行自动化控制台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="主导航">
+        <div class="brand">
+          <span class="brand-mark">旅</span>
+          <div>
+            <strong>因为旅行</strong>
+            <small>Automation Ops</small>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-item active" data-panel="overview">总览</button>
+          <button class="nav-item" data-panel="pricing">调价审批</button>
+          <button class="nav-item" data-panel="reply">客服自动回复</button>
+          <button class="nav-item" data-panel="health">运行健康</button>
+          <button class="nav-item" data-panel="audit">审查档案</button>
+        </nav>
+
+        <div class="operator-card">
+          <span class="pulse"></span>
+          <div>
+            <strong>值班状态</strong>
+            <small>自动巡检每 3 分钟运行</small>
+          </div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Ctrip eBooking + Feishu + Auto Reply</p>
+            <h1>旅行自动化中控台</h1>
+          </div>
+          <div class="top-actions">
+            <span class="range-pill">2026-04-24 → 2026-04-25</span>
+            <span class="status-pill warning" id="approvalStatus">审批待确认</span>
+            <button class="ghost-button" id="syncButton">同步当前状态</button>
+          </div>
+        </header>
+
+        <section class="notice-strip" aria-label="当前待办">
+          <div>
+            <span class="notice-label">待处理</span>
+            <strong>18:00 调价任务已生成 dry-run 计划，等待审批人口令。</strong>
+          </div>
+          <code>planDigest: 9745e1078788f8d8</code>
+        </section>
+
+        <section class="metrics" aria-label="关键指标">
+          <article class="metric-card">
+            <span>竞品抓取</span>
+            <strong>成功</strong>
+            <small>2026-04-23 18:00 生成建议</small>
+          </article>
+          <article class="metric-card">
+            <span>建议房型</span>
+            <strong>3 组</strong>
+            <small>1 组可涨，2 组维持</small>
+          </article>
+          <article class="metric-card">
+            <span>eBooking 计划</span>
+            <strong>11 个子产品</strong>
+            <small>2 组已映射，9 个保留未映射</small>
+          </article>
+          <article class="metric-card">
+            <span>客服机器人</span>
+            <strong>3 个运行中</strong>
+            <small>连续失败 0 次</small>
+          </article>
+        </section>
+
+        <section class="panel-grid">
+          <div class="primary-stack">
+            <article class="panel hero-panel" data-view="overview pricing">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Pricing Approval</p>
+                  <h2>18:00 调价任务</h2>
+                </div>
+                <span class="tag amber">dry-run 未执行</span>
+              </div>
+
+              <div class="approval-box">
+                <div>
+                  <span class="micro-label">飞书消息</span>
+                  <strong>om_x100b51aa93ebe910b4b31933aace24e</strong>
+                  <small>审批口令：确认改价 / 取消改价</small>
+                </div>
+                <div class="approval-actions">
+                  <button class="solid-button" data-decision="approved">确认改价</button>
+                  <button class="danger-button" data-decision="rejected">取消改价</button>
+                </div>
+              </div>
+
+              <div class="room-recs">
+                <article>
+                  <span class="tag green">可涨</span>
+                  <h3>大床房</h3>
+                  <p><strong>¥343 → ¥376</strong>，库存仅剩 4 间</p>
+                  <small>映射 3 个子产品，目标 ¥400-654，置信度 medium</small>
+                </article>
+                <article>
+                  <span class="tag neutral">维持</span>
+                  <h3>2张1.2米单人床</h3>
+                  <p><strong>¥377 → ¥377</strong>，库存仅剩 1 间</p>
+                  <small>未进入本轮 eBooking 映射，继续人工观察</small>
+                </article>
+                <article>
+                  <span class="tag neutral">维持</span>
+                  <h3>1张1.8米大床</h3>
+                  <p><strong>¥377 → ¥377</strong>，库存仅剩 1 间</p>
+                  <small>映射 8 个子产品，目标 ¥491-597，置信度 medium</small>
+                </article>
+              </div>
+            </article>
+
+            <article class="panel" data-view="overview pricing">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Execution Plan</p>
+                  <h2>执行计划护栏</h2>
+                </div>
+                <span class="tag blue">commit=false</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>房型组</th>
+                      <th>当前公开价</th>
+                      <th>建议公开价</th>
+                      <th>子产品</th>
+                      <th>执行护栏</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>大床房</td>
+                      <td>¥343</td>
+                      <td class="price-up">¥376</td>
+                      <td>3 个</td>
+                      <td>底价不高于售价；单项失败不中断整批</td>
+                    </tr>
+                    <tr>
+                      <td>1张1.8米大床</td>
+                      <td>¥377</td>
+                      <td>¥377</td>
+                      <td>8 个</td>
+                      <td>保存计划二次校验；缺 taskId 标 pending</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="panel" data-view="overview reply">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Customer Service Logic</p>
+                  <h2>客服回复规则</h2>
+                </div>
+                <span class="tag green">统一规则已加载</span>
+              </div>
+              <div class="logic-grid">
+                <div>
+                  <strong>可直接答复</strong>
+                  <p>停车、网络、入住人数、加床、提前入住等高频问题优先走酒店客服规则。</p>
+                </div>
+                <div>
+                  <strong>无法确认</strong>
+                  <p>发送“请留下您的联系方式，管家第一时间致电”，并避免对“好的/谢谢/收到”误升级。</p>
+                </div>
+                <div>
+                  <strong>重复拦截</strong>
+                  <p>识别已发送话术，跳过“稍后主动联系您”等历史回复，降低重复打扰。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="side-stack">
+            <article class="panel compact" data-view="overview health reply">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Live Health</p>
+                  <h2>账号运行状态</h2>
+                </div>
+              </div>
+              <div class="health-list">
+                <div class="health-row">
+                  <span class="ok-dot"></span>
+                  <div>
+                    <strong>龙王头沙滩店</strong>
+                    <small>hotel_1164390341 · 17:06 OK</small>
+                  </div>
+                </div>
+                <div class="health-row">
+                  <span class="ok-dot"></span>
+                  <div>
+                    <strong>酒店 95267083</strong>
+                    <small>hotel_95267083 · 17:06 OK</small>
+                  </div>
+                </div>
+                <div class="health-row">
+                  <span class="ok-dot"></span>
+                  <div>
+                    <strong>account_2</strong>
+                    <small>备用客服账号 · running</small>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel compact" data-view="overview pricing">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Approval Guard</p>
+                  <h2>审批安全</h2>
+                </div>
+              </div>
+              <ol class="check-list">
+                <li>只接受审批人 open_id</li>
+                <li>口令精确归一化匹配</li>
+                <li>非审批人消息自动忽略</li>
+                <li>执行结果落盘，可追溯</li>
+              </ol>
+            </article>
+
+            <article class="panel compact" data-view="overview audit">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Review Archive</p>
+                  <h2>最终审查档案 v3</h2>
+                </div>
+              </div>
+              <div class="audit-card">
+                <span class="stamp">可交付</span>
+                <p>2 个 P1、4 个 P2、1 个 M1 已收敛；13 项测试通过。</p>
+                <a href="https://github.com/northwestfeng-ctrl/travel-automation">查看仓库</a>
+              </div>
+            </article>
+          </aside>
+        </section>
+
+        <section class="timeline panel" data-view="overview health">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Automation Timeline</p>
+              <h2>今日运行链路</h2>
+            </div>
+          </div>
+          <div class="timeline-track">
+            <div><span>18:00</span><strong>竞品抓取</strong><small>携程价格/库存</small></div>
+            <div><span>18:00</span><strong>建议生成</strong><small>3 组房型策略</small></div>
+            <div><span>18:00</span><strong>dry-run 计划</strong><small>11 个子产品</small></div>
+            <div><span>待确认</span><strong>飞书审批</strong><small>确认改价后执行</small></div>
+            <div><span>每 3 分钟</span><strong>客服巡检</strong><small>会话识别与回复</small></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "competitors": [
+    {
+      "name": "携程",
+      "url": "https://you.ctrip.com/sight/xxx.html",
+      "tags": ["跟团游", "自由行"]
+    }
+  ],
+  "checkInterval": "0 9 * * *",
+  "alertThreshold": {
+    "priceChangePercent": 10
+  },
+  "pushChannel": "feishu"
+}

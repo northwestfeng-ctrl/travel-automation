@@ -1,0 +1,91 @@
+{
+  "updated_at": "2026-04-22T09:05:00+08:00",
+  "update_note": "P1 mapping expansion: added 9 products with confirmed bed types and price tier 597. Excluded: 亲子房(5), 钟点房(2), 豪华套房(1), 未确认(3). See rationales in each group.",
+  "source": "manual_seed_from_live_ebooking_catalog_and_public_listing",
+  "notes": [
+    "This mapping is intentionally conservative and only includes the most plausible ebooking products for the three public room groups currently produced by the pricing engine.",
+    "Unmapped ebooking products should not be auto-modified until a stronger cross-channel room mapping is confirmed.",
+    "reference_ebooking_sale_prices are baseline prices used to keep recommendation_to_execution_plan idempotent after a previous execution."
+  ],
+  "reference_ebooking_sale_prices": {
+    "1817749167": 365,
+    "1564324967": 597,
+    "1564329233": 597,
+    "1520169191": 491,
+    "1520169254": 491,
+    "1520169417": 491,
+    "1520169498": 491,
+    "1520169815": 597,
+    "1520169872": 597,
+    "1520170145": 597,
+    "1520169945": 597,
+    "1520168772": 491,
+    "1564330620": 597,
+    "1564981591": 597
+  },
+  "groups": [
+    {
+      "source_room_name": "大床房",
+      "public_bed_type": "1张1.5米双人床",
+      "public_reference_price": 299,
+      "confidence": "medium",
+      "rationale": "Added: 尊享套房(1564324967) and 超大床房(1564329233) - both bed-type products at 597 tier, consistent with public listing 挂牌价 597.",
+      "room_product_ids": [
+        "1817749167",
+        "1564324967",
+        "1564329233"
+      ]
+    },
+    {
+      "source_room_name": "1张1.8米大床",
+      "public_bed_type": "1张1.8米大床",
+      "public_reference_price": 399,
+      "confidence": "medium",
+      "rationale": "Expanded with 4 浴缸大床 products at 597 tier (same as listing 挂牌价). All are bed-type with bath amenities, consistent with 1张1.8米大床 category.",
+      "room_product_ids": [
+        "1520169191",
+        "1520169254",
+        "1520169417",
+        "1520169498",
+        "1520169815",
+        "1520169872",
+        "1520170145",
+        "1520169945"
+      ]
+    },
+    {
+      "source_room_name": "2张1.5米双人床",
+      "public_bed_type": "2张1.5米双人床",
+      "public_reference_price": 399,
+      "confidence": "medium",
+      "rationale": "Added 悠然标间(1564330620) and 雅致双床房(1564981591) - both twin/标准间 type at 597 tier, matching 2张1.5米双人床 category.",
+      "room_product_ids": [
+        "1520168772",
+        "1564330620",
+        "1564981591"
+      ]
+    }
+  ],
+  "unmapped_room_product_ids": [
+    "1564326066",
+    "1564326813",
+    "1564328355",
+    "1564704677",
+    "1817749169",
+    "1818531485",
+    "1818531491",
+    "1520169560",
+    "1520170010"
+  ],
+  "unmapped_rationale": {
+    "1564326066": "童趣亲子套房 - 亲子套，与大床房组床型不完全对应，待确认是否公开售卖",
+    "1564326813": "301亲子浴缸套房 - 亲子产品线，与标准大床组不同",
+    "1564328355": "豪华浴缸特大套房 - 超大套房，档次与标准大床组不同，待确认",
+    "1564704677": "植得302家庭亲子浴缸套房 - 亲子套，独立产品线",
+    "1817749169": "静谧园景大床房 钟点房 - 钟点房变体，不应参与日常调价",
+    "1818531485": "精选墅景双床房 含早餐 - 双床+早餐，与无早标准组不同",
+    "1818531491": "精选墅景双床房 钟点房 - 钟点房变体",
+    "1520169560": "植善402亲子房 - 亲子产品线，与大床组不同",
+    "1520170010": "隐海502趣味亲子房 - 亲子产品线，¥702高端定价，待确认"
+  }
+}

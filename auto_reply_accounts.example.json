@@ -1,0 +1,30 @@
+{
+  "hotel_1164390341": {
+    "hotelhst": "your_hotel_id",
+    "w_lid": "your_w_lid",
+    "w_tuid": "your_w_tuid",
+    "GUID": "your_guid",
+    "login_uid": "your_login_uid",
+    "usersign": "your_usersign",
+    "cticket": "your_cticket",
+    "_bfa": "your_bfa",
+    "usertoken": "your_usertoken",
+    "Union": "your_union",
+    "headless": true,
+    "cookie_expires_at": "2026-05-01T12:00:00"
+  },
+  "hotel_95267083": {
+    "hotelhst": "your_second_hotel_id",
+    "w_lid": "your_second_w_lid",
+    "w_tuid": "your_second_w_tuid",
+    "GUID": "your_second_guid",
+    "login_uid": "your_second_login_uid",
+    "usersign": "your_second_usersign",
+    "cticket": "your_second_cticket",
+    "_bfa": "your_second_bfa",
+    "usertoken": "your_second_usertoken",
+    "Union": "your_second_union",
+    "headless": true,
+    "cookie_expires_at": "2026-05-01T12:00:00"
+  }
+}
