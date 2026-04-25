@@ -27,6 +27,14 @@ BLOCKED_REPLY_PATTERNS = BLOCKED_CORPUS_PATTERNS + [
 ]
 
 CONTACT_ESCALATION_REPLY = "请留下您的联系方式，管家第一时间致电"
+CONTACT_ESCALATION_INTENT_PATTERNS = [
+    CONTACT_ESCALATION_REPLY,
+    "留下您的联系方式",
+    "留一下联系方式",
+    "联系方式",
+    "手机号",
+    "手机号码",
+]
 ACKNOWLEDGEMENT_PATTERNS = [
     "好的",
     "好",
@@ -102,6 +110,12 @@ def fallback_unknown_reply() -> str:
 
 def escalation_reply(prefix: str) -> str:
     return f"{prefix}{CONTACT_ESCALATION_REPLY}"
+
+
+def has_contact_escalation_intent(text: str) -> bool:
+    if contains_any(text, CONTACT_ESCALATION_INTENT_PATTERNS):
+        return True
+    return "管家" in text and ("致电" in text or "联系" in text)
 
 
 def build_service_logic_reply(guest_message: str, facts: dict) -> str:
@@ -202,6 +216,8 @@ def sanitize_generated_reply(reply: str, base_reply: str) -> str:
     if contains_any(cleaned.lower(), [pattern.lower() for pattern in BLOCKED_REPLY_PATTERNS]):
         return base_reply
     if re.search(r'1[3-9]\d{9}', cleaned):
+        return base_reply
+    if CONTACT_ESCALATION_REPLY not in base_reply and has_contact_escalation_intent(cleaned):
         return base_reply
     if CONTACT_ESCALATION_REPLY in base_reply:
         has_escalation_intent = all(keyword in cleaned for keyword in ["联系", "管家", "致电"])

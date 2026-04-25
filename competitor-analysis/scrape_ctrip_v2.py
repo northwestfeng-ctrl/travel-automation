@@ -12,6 +12,7 @@ except ImportError:
     USE_STEALTH = False
 
 import json
+import os
 import re
 from datetime import datetime
 from importlib.util import module_from_spec, spec_from_file_location
@@ -28,9 +29,53 @@ except ModuleNotFoundError:
     spec.loader.exec_module(path_config)
     competitor_results_dir = path_config.competitor_results_dir
 
-# ── 携程 cookie（从ebooking手动抓取后填入）──────────
-# 建议通过 /pricing/capture_api_v2.py 手动抓取后更新
-COOKIES = []  # TODO: 填入有效cookie
+CONFIG_FILE = Path(os.environ.get("COMPETITOR_CONFIG_FILE", Path(__file__).resolve().parent / "config.json")).expanduser()
+
+
+def parse_cookie_header(cookie_header, domain=".ctrip.com"):
+    cookies = []
+    for item in str(cookie_header).split(";"):
+        if "=" not in item:
+            continue
+        name, value = item.strip().split("=", 1)
+        if not name or not value:
+            continue
+        cookies.append(
+            {
+                "domain": domain,
+                "httpOnly": False,
+                "name": name,
+                "path": "/",
+                "sameSite": "Lax",
+                "secure": True,
+                "value": value,
+            }
+        )
+    return cookies
+
+
+def load_cookies_from_config(config_file=CONFIG_FILE):
+    if not config_file.exists():
+        return []
+    try:
+        data = json.loads(config_file.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+
+    raw_cookies = (
+        data.get("cookies")
+        or data.get("COOKIES")
+        or data.get("ctripCookies")
+        or data.get("cookie")
+    )
+    if isinstance(raw_cookies, list):
+        return raw_cookies
+    if isinstance(raw_cookies, str):
+        return parse_cookie_header(raw_cookies)
+    return []
+
+
+COOKIES = load_cookies_from_config()
 
 COMPETITORS = [
     {"name": "海慢慢·Sea Slowly平潭度假别墅", "hotelId": "122192195"},

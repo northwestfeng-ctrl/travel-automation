@@ -1,4 +1,15 @@
 {
+  "cookies": [
+    {
+      "domain": ".ctrip.com",
+      "httpOnly": false,
+      "name": "example_cookie_name",
+      "path": "/",
+      "sameSite": "Lax",
+      "secure": true,
+      "value": "example_cookie_value"
+    }
+  ],
   "competitors": [
     {
       "name": "携程",

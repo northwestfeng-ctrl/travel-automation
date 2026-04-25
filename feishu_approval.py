@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import time
 from datetime import datetime
@@ -64,6 +65,7 @@ def normalize_text(text: str) -> str:
 
 def normalize_decision_text(text: str) -> str:
     normalized = normalize_text(text)
+    normalized = re.sub(r"^(?:\[引用\]|【引用】|引用[:：]?|回复[:：]?)", "", normalized)
     return normalized.strip("。.!！,，;；:：“”\"'（）()[]【】")
 
 
@@ -76,7 +78,19 @@ def sender_open_id(message: dict[str, Any]) -> str:
 
 def matches_decision_keyword(text: str, keywords: list[str]) -> bool:
     normalized = normalize_decision_text(text)
-    return normalized in keywords
+    if normalized in keywords:
+        return True
+
+    candidate = normalized
+    for prefix in ("好的", "好", "可以", "行", "收到", "麻烦", "请"):
+        if candidate.startswith(prefix):
+            candidate = candidate[len(prefix) :].strip("。.!！,，;；:：“”\"'（）()[]【】")
+            break
+    for suffix in ("谢谢", "辛苦", "可以", "吧", "了", "哈", "哦", "呀"):
+        if candidate.endswith(suffix):
+            candidate = candidate[: -len(suffix)].strip("。.!！,，;；:：“”\"'（）()[]【】")
+            break
+    return candidate in keywords
 
 
 def detect_decision(dispatch: dict[str, Any], messages: list[dict[str, Any]]) -> dict[str, Any] | None:

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import importlib.util
+import json
 import os
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -31,6 +33,42 @@ class CompetitorPathConfigTests(unittest.TestCase):
 
     def test_scraper_compiles_and_imports_without_absolute_project_path(self):
         load_competitor_module("scrape_ctrip_v2_for_test", "scrape_ctrip_v2.py")
+
+    def test_scraper_loads_cookies_from_config_file(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config_file = Path(tmpdir) / "config.json"
+            config_file.write_text(
+                json.dumps(
+                    {
+                        "cookies": [
+                            {
+                                "domain": ".ctrip.com",
+                                "name": "cticket",
+                                "path": "/",
+                                "value": "test_ticket",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch.dict(os.environ, {"COMPETITOR_CONFIG_FILE": str(config_file)}):
+                module = load_competitor_module("scrape_ctrip_v2_cookie_test", "scrape_ctrip_v2.py")
+
+        self.assertEqual(module.COOKIES[0]["name"], "cticket")
+        self.assertEqual(module.COOKIES[0]["value"], "test_ticket")
+
+    def test_scraper_parses_cookie_header_from_config_file(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config_file = Path(tmpdir) / "config.json"
+            config_file.write_text(
+                json.dumps({"cookie": "cticket=test_ticket; usertoken=test_token"}),
+                encoding="utf-8",
+            )
+            with patch.dict(os.environ, {"COMPETITOR_CONFIG_FILE": str(config_file)}):
+                module = load_competitor_module("scrape_ctrip_v2_cookie_header_test", "scrape_ctrip_v2.py")
+
+        self.assertEqual([cookie["name"] for cookie in module.COOKIES], ["cticket", "usertoken"])
 
 
 if __name__ == "__main__":

@@ -67,6 +67,11 @@ class ReplyLogicTests(unittest.TestCase):
         candidate = "亲,麻烦发下您看的具体房型,我帮您确认房间配置哦~"
         self.assertEqual(sanitize_generated_reply(candidate, base), base)
 
+    def test_sanitize_blocks_unprompted_contact_escalation(self):
+        base = build_service_logic_reply("好的", {})
+        candidate = "亲,好的~请留下您的联系方式，管家第一时间致电"
+        self.assertEqual(sanitize_generated_reply(candidate, base), base)
+
     def test_extra_amenity_phrases(self):
         signal_reply = build_service_logic_reply("你们那边信号好吗", self.facts)
         self.assertIn("高速Wi-Fi", signal_reply)

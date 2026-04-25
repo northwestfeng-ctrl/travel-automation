@@ -9,7 +9,7 @@ os.environ.setdefault("FEISHU_APP_ID", "test_app_id")
 os.environ.setdefault("FEISHU_APP_SECRET", "test_app_secret")
 os.environ.setdefault("FEISHU_USER_OPEN_ID", "ou_authorized")
 
-from feishu_approval import detect_decision
+from feishu_approval import detect_decision, matches_decision_keyword
 
 PRICING_DIR = Path(__file__).resolve().parents[1] / "pricing"
 if str(PRICING_DIR) in sys.path:
@@ -56,6 +56,19 @@ class FeishuApprovalGuardrailTests(unittest.TestCase):
         ]
 
         self.assertIsNone(detect_decision(dispatch, messages))
+
+    def test_matches_decision_keyword_accepts_safe_short_wrappers(self):
+        keywords = ["确认改价", "批准改价"]
+
+        self.assertTrue(matches_decision_keyword("好，确认改价", keywords))
+        self.assertTrue(matches_decision_keyword("[引用] 批准改价", keywords))
+        self.assertTrue(matches_decision_keyword("确认改价吧", keywords))
+
+    def test_matches_decision_keyword_rejects_ambiguous_long_text(self):
+        keywords = ["确认改价"]
+
+        self.assertFalse(matches_decision_keyword("我们确认改价吗？", keywords))
+        self.assertFalse(matches_decision_keyword("不要确认改价", keywords))
 
 
 if __name__ == "__main__":
